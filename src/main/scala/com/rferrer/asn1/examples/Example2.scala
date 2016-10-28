@@ -35,7 +35,7 @@ object Example2 {
       val padding = " " * indent
       val tagNumberStr = s"[${data.identifier.tagNumber}]"
       // If universal, and type name available, use universal type name. Otherwise use tag number.
-      val tagNumberOrName = if (data.isUniversal) data.getUniversalTypeName.getOrElse(data.identifier.tagNumber, tagNumberStr) else tagNumberStr
+      val tagNumberOrName = data.getUniversalTypeName.getOrElse(tagNumberStr)
       val brace = if (data.isConstructed) "{" else ""
       val contents = data.contents match {
         case Some(ContentsBytes(theBytes)) => Util.byteArraytoHexString(theBytes, " ")

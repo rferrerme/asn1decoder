@@ -68,10 +68,13 @@ object Asn1DecoderData {
   case object Reserved extends Form { def name = "Reserved" }
 
   case class Identifier(offset: Int, tagClass: TagClass, primitiveOrConstructed: PrimitiveOrConstructed, tagNumber: Int) {
-    def getUniversalTypeName = tagNumberToUniversalTypeName.get(tagNumber)
+    def isConstructed = this.primitiveOrConstructed == Asn1DecoderData.Constructed
+    def isPrimitive = this.primitiveOrConstructed == Asn1DecoderData.Primitive
+    def isUniversal = this.tagClass == Asn1DecoderData.Universal
+    def getUniversalTypeName = if (isUniversal) tagNumberToUniversalTypeName.get(tagNumber) else None
+    val universalTypeNameOrTagNumber = getUniversalTypeName.getOrElse(tagNumber.toString)
     override def toString = {
-      val tagNumberOrUniversalTypeName = getUniversalTypeName.getOrElse(tagNumber)
-      s"Identifier($offset,$tagClass,$primitiveOrConstructed,$tagNumberOrUniversalTypeName)"
+      s"Identifier($offset,$tagClass,$primitiveOrConstructed,$universalTypeNameOrTagNumber)"
     }
   }
 
@@ -94,9 +97,9 @@ object Asn1DecoderData {
   }
 
   case class Data(identifier: Identifier, length: Length, contents: Option[Contents]) {
-    def isConstructed = this.identifier.primitiveOrConstructed == Asn1DecoderData.Constructed
-    def isPrimitive = this.identifier.primitiveOrConstructed == Asn1DecoderData.Primitive
-    def isUniversal = this.identifier.tagClass == Asn1DecoderData.Universal
+    def isConstructed = this.identifier.isConstructed
+    def isPrimitive = this.identifier.isPrimitive
+    def isUniversal = this.identifier.isUniversal
     def isEnd = this.isPrimitive && this.isUniversal && (this.identifier.tagNumber == 0)
     def getUniversalTypeName = this.identifier.getUniversalTypeName
   }
