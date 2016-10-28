@@ -28,7 +28,7 @@ Finally, to run the examples:
 
 "Example1" simply produces a stream of `Data` objects from the information in the input file and prints those objects:
 ```
-Data(Identifier(0,Universal,Constructed,16),Length(Indefinite,0),None)
+Data(Identifier(0,Universal,Constructed,SEQUENCE),Length(Indefinite,0),None)
 Data(Identifier(2,ContextSpecific,Constructed,0),Length(Indefinite,0),None)
 Data(Identifier(4,ContextSpecific,Primitive,0),Length(DefinitiveShort,1),Some(ContentsBytes([01])))
 ...
