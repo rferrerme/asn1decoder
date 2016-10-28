@@ -69,6 +69,10 @@ object Asn1DecoderData {
 
   case class Identifier(offset: Int, tagClass: TagClass, primitiveOrConstructed: PrimitiveOrConstructed, tagNumber: Int) {
     def getUniversalTypeName = tagNumberToUniversalTypeName.get(tagNumber)
+    override def toString = {
+      val tagNumberOrUniversalTypeName = getUniversalTypeName.getOrElse(tagNumber)
+      s"Identifier($offset,$tagClass,$primitiveOrConstructed,$tagNumberOrUniversalTypeName)"
+    }
   }
 
   case class Length(form: Form, length: Int)
